@@ -1,0 +1,1537 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Dose — Café de Especialidad</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Crimson+Pro:ital,wght@0,300;0,400;1,300;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --black: #0A0A08;
+  --cream: #F2EDE4;
+  --warm: #EDE8DF;
+  --beige: #E0D9CE;
+  --stone: #B8B0A4;
+  --muted: #8C8478;
+  --gold: #B8935A;
+  --gold-light: #F5ECD9;
+  --white: #FAF8F4;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--cream);
+  color: var(--black);
+  font-family: 'Crimson Pro', serif;
+  font-weight: 300;
+  line-height: 1.6;
+  cursor: none;
+  overflow-x: hidden;
+}
+
+/* CUSTOM CURSOR */
+.cursor {
+  width: 12px; height: 12px;
+  background: var(--gold);
+  border-radius: 50%;
+  position: fixed;
+  top: 0; left: 0;
+  pointer-events: none;
+  z-index: 9999;
+  transition: transform 0.15s ease, background 0.2s;
+  transform: translate(-50%, -50%);
+}
+
+.cursor-ring {
+  width: 36px; height: 36px;
+  border: 1px solid var(--gold);
+  border-radius: 50%;
+  position: fixed;
+  top: 0; left: 0;
+  pointer-events: none;
+  z-index: 9998;
+  transition: transform 0.35s ease, width 0.3s, height 0.3s, opacity 0.3s;
+  transform: translate(-50%, -50%);
+  opacity: 0.5;
+}
+
+body:hover .cursor { opacity: 1; }
+
+/* NAV */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  padding: 0 4rem;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: background 0.4s, backdrop-filter 0.4s;
+}
+
+nav.scrolled {
+  background: rgba(10,10,8,0.92);
+  backdrop-filter: blur(12px);
+}
+
+.nav-logo {
+  text-decoration: none;
+  display: flex;
+  flex-direction: column;
+  line-height: 1;
+}
+
+.nav-logo-the {
+  font-family: 'DM Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.35em;
+  color: var(--gold);
+  text-transform: uppercase;
+}
+
+.nav-logo-dose {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.6rem;
+  letter-spacing: 0.1em;
+  color: var(--cream);
+  line-height: 0.9;
+}
+
+.nav-links {
+  display: flex;
+  gap: 2.5rem;
+  list-style: none;
+}
+
+.nav-links a {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(242,237,228,0.6);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.nav-links a:hover { color: var(--cream); }
+
+.nav-cta {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--black) !important;
+  background: var(--gold);
+  padding: 8px 18px;
+  border-radius: 2px;
+  text-decoration: none;
+  transition: background 0.2s, transform 0.2s !important;
+}
+
+.nav-cta:hover {
+  background: #d4a86a !important;
+  transform: translateY(-1px);
+  color: var(--black) !important;
+}
+
+/* HERO */
+#home {
+  min-height: 100vh;
+  background: var(--black);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-grid-overlay {
+  position: absolute;
+  inset: 0;
+  background-image:
+    repeating-linear-gradient(0deg, transparent, transparent 79px, rgba(255,255,255,0.02) 79px, rgba(255,255,255,0.02) 80px),
+    repeating-linear-gradient(90deg, transparent, transparent 79px, rgba(255,255,255,0.02) 79px, rgba(255,255,255,0.02) 80px);
+  pointer-events: none;
+}
+
+.hero-left {
+  padding: 8rem 4rem 4rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border-right: 0.5px solid rgba(255,255,255,0.06);
+  position: relative;
+  z-index: 1;
+}
+
+.hero-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--gold);
+  opacity: 0;
+  animation: fadeUp 0.8s ease 0.2s forwards;
+}
+
+.hero-headline {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(5rem, 10vw, 9rem);
+  line-height: 0.88;
+  letter-spacing: 0.04em;
+  color: var(--cream);
+  opacity: 0;
+  animation: fadeUp 0.8s ease 0.4s forwards;
+}
+
+.hero-headline .gold { color: var(--gold); }
+
+.hero-subtext {
+  font-family: 'Crimson Pro', serif;
+  font-style: italic;
+  font-size: 1.15rem;
+  color: rgba(242,237,228,0.5);
+  max-width: 380px;
+  line-height: 1.6;
+  opacity: 0;
+  animation: fadeUp 0.8s ease 0.6s forwards;
+}
+
+.hero-actions {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  opacity: 0;
+  animation: fadeUp 0.8s ease 0.8s forwards;
+}
+
+.btn-primary {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--black);
+  background: var(--gold);
+  padding: 14px 28px;
+  border-radius: 2px;
+  text-decoration: none;
+  display: inline-block;
+  transition: background 0.2s, transform 0.2s;
+}
+
+.btn-primary:hover { background: #d4a86a; transform: translateY(-2px); }
+
+.btn-ghost {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: rgba(242,237,228,0.5);
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: color 0.2s;
+}
+
+.btn-ghost:hover { color: var(--cream); }
+.btn-ghost::after { content: '→'; }
+
+.hero-right {
+  padding: 8rem 4rem 4rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  position: relative;
+  z-index: 1;
+  gap: 2rem;
+  opacity: 0;
+  animation: fadeIn 1.2s ease 1s forwards;
+}
+
+.hero-stat-row {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.hero-stat {
+  padding: 1.25rem 1.5rem;
+  background: rgba(255,255,255,0.03);
+  border-left: 2px solid transparent;
+  transition: border-color 0.3s, background 0.3s;
+}
+
+.hero-stat:hover {
+  border-color: var(--gold);
+  background: rgba(184,147,90,0.05);
+}
+
+.hero-stat-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(242,237,228,0.3);
+  margin-bottom: 5px;
+}
+
+.hero-stat-val {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.4rem;
+  letter-spacing: 0.08em;
+  color: var(--cream);
+}
+
+.hero-quote {
+  border-left: 2px solid var(--gold);
+  padding-left: 1.5rem;
+  font-style: italic;
+  font-size: 0.95rem;
+  color: rgba(242,237,228,0.4);
+  line-height: 1.6;
+}
+
+.hero-scroll {
+  position: absolute;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  z-index: 2;
+  animation: fadeIn 1s ease 1.5s both;
+}
+
+.hero-scroll-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(242,237,228,0.3);
+}
+
+.hero-scroll-line {
+  width: 1px;
+  height: 40px;
+  background: linear-gradient(to bottom, rgba(184,147,90,0.6), transparent);
+  animation: scrollPulse 2s ease infinite;
+}
+
+/* SECTION COMMONS */
+.section-wrap {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 6rem 4rem;
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 4rem;
+}
+
+.section-num {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  color: var(--gold);
+  letter-spacing: 0.1em;
+}
+
+.section-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 2.5rem;
+  letter-spacing: 0.08em;
+  color: var(--black);
+}
+
+.section-line {
+  flex: 1;
+  height: 0.5px;
+  background: var(--beige);
+}
+
+/* EL CAFÉ */
+#cafe { background: var(--cream); }
+
+.cafe-intro {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  margin-bottom: 4rem;
+  align-items: center;
+}
+
+.cafe-intro-text {
+  font-size: 1.15rem;
+  line-height: 1.8;
+  color: var(--muted);
+}
+
+.cafe-intro-text strong {
+  color: var(--black);
+  font-weight: 400;
+  font-style: italic;
+}
+
+.cafe-statement {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 3rem;
+  letter-spacing: 0.05em;
+  line-height: 1;
+  color: var(--black);
+}
+
+.cafe-statement .gold { color: var(--gold); }
+
+.coffees-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.5rem;
+}
+
+.coffee-card {
+  background: var(--white);
+  border: 0.5px solid var(--beige);
+  border-radius: 4px;
+  overflow: hidden;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.coffee-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+}
+
+.coffee-card-top {
+  height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.coffee-badge {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border-radius: 20px;
+}
+
+.badge-disponible { background: var(--gold-light); color: var(--gold); }
+.badge-agotado { background: var(--beige); color: var(--muted); }
+
+.coffee-origin-display {
+  text-align: center;
+}
+
+.coffee-flag {
+  font-size: 3rem;
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.coffee-country {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.7);
+}
+
+.coffee-card-body { padding: 1.5rem; }
+
+.coffee-name {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.6rem;
+  letter-spacing: 0.08em;
+  color: var(--black);
+  margin-bottom: 0.25rem;
+}
+
+.coffee-region {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  color: var(--gold);
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+}
+
+.coffee-notes {
+  font-style: italic;
+  font-size: 0.95rem;
+  color: var(--muted);
+  margin-bottom: 1.25rem;
+  line-height: 1.5;
+}
+
+.coffee-data {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  border-top: 0.5px solid var(--beige);
+  padding-top: 1rem;
+}
+
+.coffee-data-item {
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+  text-transform: uppercase;
+}
+
+.coffee-data-item span {
+  display: block;
+  color: var(--black);
+  font-size: 11px;
+  margin-top: 2px;
+}
+
+/* CÓMO FUNCIONA */
+#como-funciona { background: var(--black); }
+#como-funciona .section-title { color: var(--cream); }
+#como-funciona .section-line { background: rgba(255,255,255,0.1); }
+#como-funciona .section-num { color: var(--gold); }
+
+.steps-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1px;
+  background: rgba(255,255,255,0.06);
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 4rem;
+}
+
+.step {
+  padding: 3rem 2.5rem;
+  background: rgba(255,255,255,0.02);
+  position: relative;
+  transition: background 0.3s;
+}
+
+.step:hover { background: rgba(184,147,90,0.05); }
+
+.step-num {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 5rem;
+  letter-spacing: 0.05em;
+  color: rgba(184,147,90,0.15);
+  line-height: 1;
+  margin-bottom: 1.5rem;
+}
+
+.step-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.6rem;
+  letter-spacing: 0.08em;
+  color: var(--cream);
+  margin-bottom: 0.75rem;
+}
+
+.step-desc {
+  font-size: 0.95rem;
+  color: rgba(242,237,228,0.5);
+  line-height: 1.7;
+}
+
+.step-accent {
+  position: absolute;
+  bottom: 1.5rem;
+  right: 1.5rem;
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+.promise-strip {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1.5rem;
+}
+
+.promise-item {
+  text-align: center;
+  padding: 1.5rem;
+  border: 0.5px solid rgba(255,255,255,0.06);
+  border-radius: 4px;
+  transition: border-color 0.3s;
+}
+
+.promise-item:hover { border-color: rgba(184,147,90,0.3); }
+
+.promise-icon {
+  font-size: 1.5rem;
+  margin-bottom: 0.75rem;
+  display: block;
+}
+
+.promise-title {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 0.5rem;
+}
+
+.promise-desc {
+  font-size: 0.85rem;
+  color: rgba(242,237,228,0.4);
+  line-height: 1.5;
+}
+
+/* SUSCRIPCIÓN */
+#suscripcion { background: var(--warm); }
+
+.plans-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 4rem;
+}
+
+.plan-card {
+  background: var(--white);
+  border: 0.5px solid var(--beige);
+  border-radius: 4px;
+  padding: 2.5rem;
+  position: relative;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.plan-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.06);
+}
+
+.plan-card.featured {
+  border: 2px solid var(--gold);
+  background: var(--black);
+}
+
+.featured-badge {
+  position: absolute;
+  top: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--gold);
+  color: var(--black);
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  padding: 4px 14px;
+  border-radius: 20px;
+  white-space: nowrap;
+}
+
+.plan-name {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 2rem;
+  letter-spacing: 0.08em;
+  color: var(--black);
+  margin-bottom: 0.5rem;
+}
+
+.plan-card.featured .plan-name { color: var(--cream); }
+
+.plan-desc {
+  font-size: 0.9rem;
+  color: var(--muted);
+  margin-bottom: 2rem;
+  line-height: 1.5;
+  font-style: italic;
+}
+
+.plan-card.featured .plan-desc { color: rgba(242,237,228,0.5); }
+
+.plan-price {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+  margin-bottom: 2rem;
+  padding-bottom: 2rem;
+  border-bottom: 0.5px solid var(--beige);
+}
+
+.plan-card.featured .plan-price { border-color: rgba(255,255,255,0.1); }
+
+.plan-price-currency {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+
+.plan-price-amount {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 3rem;
+  letter-spacing: 0.04em;
+  color: var(--black);
+  line-height: 1;
+}
+
+.plan-card.featured .plan-price-amount { color: var(--gold); }
+
+.plan-price-period {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  color: var(--muted);
+  letter-spacing: 0.1em;
+}
+
+.plan-features {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: 2rem;
+}
+
+.plan-features li {
+  font-size: 0.9rem;
+  color: var(--black);
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  line-height: 1.4;
+}
+
+.plan-card.featured .plan-features li { color: rgba(242,237,228,0.75); }
+
+.plan-features li::before {
+  content: '—';
+  color: var(--gold);
+  flex-shrink: 0;
+  font-family: 'DM Mono', monospace;
+  font-size: 12px;
+}
+
+.plan-btn {
+  display: block;
+  text-align: center;
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  padding: 14px;
+  border-radius: 2px;
+  text-decoration: none;
+  transition: all 0.2s;
+}
+
+.plan-btn-outline {
+  border: 0.5px solid var(--beige);
+  color: var(--black);
+}
+
+.plan-btn-outline:hover {
+  border-color: var(--gold);
+  color: var(--gold);
+}
+
+.plan-btn-solid {
+  background: var(--gold);
+  color: var(--black);
+}
+
+.plan-btn-solid:hover {
+  background: #d4a86a;
+  transform: translateY(-1px);
+}
+
+.quiz-cta {
+  background: var(--black);
+  border-radius: 4px;
+  padding: 3rem;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 2rem;
+  align-items: center;
+}
+
+.quiz-text h3 {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 2rem;
+  letter-spacing: 0.08em;
+  color: var(--cream);
+  margin-bottom: 0.5rem;
+}
+
+.quiz-text p {
+  font-style: italic;
+  color: rgba(242,237,228,0.5);
+  font-size: 0.95rem;
+}
+
+/* ABOUT */
+#about { background: var(--cream); }
+
+.about-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 5rem;
+  align-items: center;
+  margin-bottom: 5rem;
+}
+
+.about-manifesto {
+  font-family: 'Crimson Pro', serif;
+  font-style: italic;
+  font-size: 1.4rem;
+  line-height: 1.8;
+  color: var(--black);
+  position: relative;
+  padding-left: 2rem;
+  border-left: 2px solid var(--gold);
+}
+
+.about-content {}
+
+.about-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 1rem;
+}
+
+.about-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 2.5rem;
+  letter-spacing: 0.06em;
+  color: var(--black);
+  line-height: 1;
+  margin-bottom: 1.5rem;
+}
+
+.about-body {
+  font-size: 1rem;
+  color: var(--muted);
+  line-height: 1.8;
+  margin-bottom: 1.5rem;
+}
+
+.about-body strong {
+  color: var(--black);
+  font-weight: 400;
+  font-style: italic;
+}
+
+.values-row {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.5rem;
+}
+
+.value-item {
+  padding: 1.5rem;
+  background: var(--white);
+  border: 0.5px solid var(--beige);
+  border-radius: 4px;
+  border-top: 2px solid var(--gold);
+}
+
+.value-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.2rem;
+  letter-spacing: 0.08em;
+  color: var(--black);
+  margin-bottom: 0.5rem;
+}
+
+.value-desc {
+  font-size: 0.85rem;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+/* TESTIMONIALS */
+.testimonials-strip {
+  background: var(--black);
+  padding: 4rem;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 3rem;
+  max-width: 100%;
+}
+
+.testimonial {
+  position: relative;
+}
+
+.testimonial-quote {
+  font-style: italic;
+  font-size: 1rem;
+  color: rgba(242,237,228,0.7);
+  line-height: 1.7;
+  margin-bottom: 1.25rem;
+}
+
+.testimonial-author {
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+/* FOOTER */
+footer {
+  background: var(--black);
+  padding: 4rem;
+  border-top: 0.5px solid rgba(255,255,255,0.06);
+}
+
+.footer-grid {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 3rem;
+  margin-bottom: 3rem;
+}
+
+.footer-brand-col {}
+
+.footer-logo-the {
+  font-family: 'DM Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.35em;
+  color: var(--gold);
+  text-transform: uppercase;
+}
+
+.footer-logo-dose {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 2.5rem;
+  letter-spacing: 0.1em;
+  color: var(--cream);
+  line-height: 0.9;
+  margin-bottom: 1rem;
+}
+
+.footer-tagline {
+  font-style: italic;
+  font-size: 0.85rem;
+  color: rgba(242,237,228,0.35);
+  line-height: 1.6;
+  max-width: 260px;
+  margin-bottom: 1.5rem;
+}
+
+.footer-newsletter {
+  display: flex;
+  gap: 0;
+}
+
+.footer-newsletter input {
+  flex: 1;
+  background: rgba(255,255,255,0.05);
+  border: 0.5px solid rgba(255,255,255,0.1);
+  border-right: none;
+  padding: 10px 14px;
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  color: var(--cream);
+  border-radius: 2px 0 0 2px;
+  outline: none;
+}
+
+.footer-newsletter input::placeholder { color: rgba(242,237,228,0.2); }
+
+.footer-newsletter button {
+  background: var(--gold);
+  border: none;
+  padding: 10px 16px;
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--black);
+  cursor: pointer;
+  border-radius: 0 2px 2px 0;
+  transition: background 0.2s;
+}
+
+.footer-newsletter button:hover { background: #d4a86a; }
+
+.footer-col-title {
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 1.25rem;
+}
+
+.footer-links {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.footer-links a {
+  font-size: 0.85rem;
+  color: rgba(242,237,228,0.4);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.footer-links a:hover { color: var(--cream); }
+
+.footer-bottom {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding-top: 2rem;
+  border-top: 0.5px solid rgba(255,255,255,0.06);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.footer-copy {
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  color: rgba(242,237,228,0.2);
+}
+
+.footer-socials {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.footer-socials a {
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: rgba(242,237,228,0.3);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.footer-socials a:hover { color: var(--gold); }
+
+/* ANIMATIONS */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes scrollPulse {
+  0%, 100% { opacity: 0.3; transform: scaleY(1); }
+  50% { opacity: 1; transform: scaleY(1.2); }
+}
+
+/* SCROLL REVEAL */
+.reveal {
+  opacity: 0;
+  transform: translateY(32px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.reveal-delay-1 { transition-delay: 0.1s; }
+.reveal-delay-2 { transition-delay: 0.2s; }
+.reveal-delay-3 { transition-delay: 0.3s; }
+.reveal-delay-4 { transition-delay: 0.4s; }
+
+/* RESPONSIVE */
+@media (max-width: 900px) {
+  nav { padding: 0 1.5rem; }
+  .nav-links { display: none; }
+  #home { grid-template-columns: 1fr; min-height: 100svh; }
+  .hero-right { display: none; }
+  .hero-left { padding: 6rem 2rem 3rem; }
+  .section-wrap { padding: 4rem 1.5rem; }
+  .cafe-intro, .about-grid { grid-template-columns: 1fr; gap: 2rem; }
+  .coffees-grid, .plans-grid, .steps-grid { grid-template-columns: 1fr; }
+  .promise-strip { grid-template-columns: 1fr 1fr; }
+  .values-row { grid-template-columns: 1fr; }
+  .testimonials-strip { grid-template-columns: 1fr; padding: 2rem; }
+  .footer-grid { grid-template-columns: 1fr 1fr; gap: 2rem; }
+  .footer-bottom { flex-direction: column; gap: 1rem; text-align: center; }
+  .quiz-cta { grid-template-columns: 1fr; }
+  body { cursor: auto; }
+  .cursor, .cursor-ring { display: none; }
+}
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- NAV -->
+<nav id="nav">
+  <a href="#home" class="nav-logo">
+    <span class="nav-logo-the">The</span>
+    <span class="nav-logo-dose">DOSE</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#cafe">El Café</a></li>
+    <li><a href="#como-funciona">Cómo funciona</a></li>
+    <li><a href="#suscripcion">Suscripción</a></li>
+    <li><a href="#about">Nosotros</a></li>
+    <li><a href="#suscripcion" class="nav-cta">Elegí tu dosis</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section id="home">
+  <div class="hero-grid-overlay"></div>
+  <div class="hero-left">
+    <div class="hero-label">Café de especialidad · CABA & zona norte</div>
+    <div>
+      <div class="hero-headline">
+        Tu<br>
+        <span class="gold">dosis</span><br>
+        exacta.
+      </div>
+    </div>
+    <p class="hero-subtext">Granos de origen único, recién tostados, en tu puerta. Para los que ya saben — y para los que están a punto de descubrirlo.</p>
+    <div class="hero-actions">
+      <a href="#suscripcion" class="btn-primary">Elegí tu dosis</a>
+      <a href="#cafe" class="btn-ghost">Ver el café</a>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="hero-stat-row">
+      <div class="hero-stat">
+        <div class="hero-stat-label">Tiempo del tueste a tu puerta</div>
+        <div class="hero-stat-val">72 horas</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-label">Orígenes disponibles</div>
+        <div class="hero-stat-val">Etiopía · Colombia · Guatemala</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-label">Puntuación mínima SCA</div>
+        <div class="hero-stat-val">85 puntos</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-label">Satisfacción garantizada</div>
+        <div class="hero-stat-val">Primera bolsa o te la cambiamos</div>
+      </div>
+    </div>
+    <p class="hero-quote">"The dose" es la medida exacta de café para un espresso perfecto. Nosotros somos exactamente eso — ni más, ni menos.</p>
+  </div>
+  <div class="hero-scroll">
+    <span class="hero-scroll-label">Scroll</span>
+    <div class="hero-scroll-line"></div>
+  </div>
+</section>
+
+<!-- EL CAFÉ -->
+<section id="cafe">
+  <div class="section-wrap">
+    <div class="section-header reveal">
+      <span class="section-num">01</span>
+      <h2 class="section-title">El Café</h2>
+      <div class="section-line"></div>
+    </div>
+    <div class="cafe-intro reveal">
+      <div class="cafe-statement">
+        Granos que<br>
+        <span class="gold">tienen algo</span><br>
+        que decir.
+      </div>
+      <div class="cafe-intro-text">
+        <p>No manejamos catálogos de 40 cafés. Elegimos <strong>tres orígenes por vez</strong>, los conocemos en profundidad, y los rotamos cuando termina la cosecha. Así sabemos exactamente qué te estás tomando — y podemos contártelo sin aburrir.</p>
+      </div>
+    </div>
+    <div class="coffees-grid">
+      <div class="coffee-card reveal reveal-delay-1">
+        <div class="coffee-card-top" style="background: linear-gradient(135deg, #2D4A2D, #1A3A1A);">
+          <div class="coffee-badge badge-disponible">Disponible</div>
+          <div class="coffee-origin-display">
+            <span class="coffee-flag">🇪🇹</span>
+            <span class="coffee-country">Etiopía</span>
+          </div>
+        </div>
+        <div class="coffee-card-body">
+          <div class="coffee-name">Yirgacheffe</div>
+          <div class="coffee-region">Yirgacheffe · Proceso Natural</div>
+          <p class="coffee-notes">"Como tomar durazno maduro con una pizca de jazmín. Arranca floral y termina en chocolate blanco. No lo esperás — y por eso lo recordás."</p>
+          <div class="coffee-data">
+            <div class="coffee-data-item">Altitud<span>2.100 msnm</span></div>
+            <div class="coffee-data-item">Score SCA<span>88.5 pts</span></div>
+            <div class="coffee-data-item">Tueste<span>Claro</span></div>
+            <div class="coffee-data-item">Productor<span>Getachew B.</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="coffee-card reveal reveal-delay-2">
+        <div class="coffee-card-top" style="background: linear-gradient(135deg, #4A2D1A, #3A1A0A);">
+          <div class="coffee-badge badge-disponible">Disponible</div>
+          <div class="coffee-origin-display">
+            <span class="coffee-flag">🇨🇴</span>
+            <span class="coffee-country">Colombia</span>
+          </div>
+        </div>
+        <div class="coffee-card-body">
+          <div class="coffee-name">Huila</div>
+          <div class="coffee-region">Huila · Proceso Lavado</div>
+          <p class="coffee-notes">"Caramelo, naranja y algo que se siente como un abrazo. El café que tomás cuando querés que todo esté bien. Clásico sin ser aburrido."</p>
+          <div class="coffee-data">
+            <div class="coffee-data-item">Altitud<span>1.750 msnm</span></div>
+            <div class="coffee-data-item">Score SCA<span>86.5 pts</span></div>
+            <div class="coffee-data-item">Tueste<span>Medio</span></div>
+            <div class="coffee-data-item">Productor<span>Familia Pérez</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="coffee-card reveal reveal-delay-3">
+        <div class="coffee-card-top" style="background: linear-gradient(135deg, #1A2D4A, #0A1A3A);">
+          <div class="coffee-badge badge-disponible">Disponible</div>
+          <div class="coffee-origin-display">
+            <span class="coffee-flag">🇬🇹</span>
+            <span class="coffee-country">Guatemala</span>
+          </div>
+        </div>
+        <div class="coffee-card-body">
+          <div class="coffee-name">Antigua</div>
+          <div class="coffee-region">Antigua · Proceso Honey</div>
+          <p class="coffee-notes">"Chocolate amargo, almendra tostada, y un final que te deja pensando. El café para espresso que te hace entender por qué algunos se volvieron obsesivos."</p>
+          <div class="coffee-data">
+            <div class="coffee-data-item">Altitud<span>1.500 msnm</span></div>
+            <div class="coffee-data-item">Score SCA<span>87.0 pts</span></div>
+            <div class="coffee-data-item">Tueste<span>Medio-oscuro</span></div>
+            <div class="coffee-data-item">Productor<span>Finca La Hermosa</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CÓMO FUNCIONA -->
+<section id="como-funciona">
+  <div class="section-wrap">
+    <div class="section-header reveal">
+      <span class="section-num">02</span>
+      <h2 class="section-title">Cómo funciona</h2>
+      <div class="section-line"></div>
+    </div>
+    <div class="steps-grid">
+      <div class="step reveal reveal-delay-1">
+        <div class="step-num">01</div>
+        <div class="step-title">Elegís tu dosis</div>
+        <p class="step-desc">Respondés 3 preguntas sobre cómo tomás el café y qué sabores te gustan. Nosotros te matcheamos con el origen perfecto para arrancar. Sin tecnicismos, sin presión.</p>
+        <span class="step-accent">3 minutos</span>
+      </div>
+      <div class="step reveal reveal-delay-2">
+        <div class="step-num">02</div>
+        <div class="step-title">Tostamos para vos</div>
+        <p class="step-desc">Tu café se tuesta el martes de cada semana. No antes. No guardamos stock de granos tostados. Cada bolsa sale de la tostadora directo a tu caja.</p>
+        <span class="step-accent">Martes de tueste</span>
+      </div>
+      <div class="step reveal reveal-delay-3">
+        <div class="step-num">03</div>
+        <div class="step-title">Llega el viernes</div>
+        <p class="step-desc">En tu puerta antes del fin de semana. En la caja encontrás la bolsa, una tarjeta con todo lo que necesitás saber del origen, y nada más. No somos de exagerar.</p>
+        <span class="step-accent">Viernes de entrega</span>
+      </div>
+    </div>
+    <div class="promise-strip reveal">
+      <div class="promise-item">
+        <span class="promise-icon">⚡</span>
+        <div class="promise-title">Siempre fresco</div>
+        <p class="promise-desc">De la tostadora a tu puerta en menos de 72 horas.</p>
+      </div>
+      <div class="promise-item">
+        <span class="promise-icon">⏸</span>
+        <div class="promise-title">Pausá cuando quieras</div>
+        <p class="promise-desc">Sin llamadas, sin formularios. Un click y listo.</p>
+      </div>
+      <div class="promise-item">
+        <span class="promise-icon">↔</span>
+        <div class="promise-title">Cambiá el origen</div>
+        <p class="promise-desc">Cada mes podés pedir algo distinto. O quedarte con tu favorito.</p>
+      </div>
+      <div class="promise-item">
+        <span class="promise-icon">✓</span>
+        <div class="promise-title">Garantía total</div>
+        <p class="promise-desc">¿No te gustó la primera bolsa? Te la cambiamos sin preguntas.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SUSCRIPCIÓN -->
+<section id="suscripcion">
+  <div class="section-wrap">
+    <div class="section-header reveal">
+      <span class="section-num">03</span>
+      <h2 class="section-title">Suscripción</h2>
+      <div class="section-line"></div>
+    </div>
+    <div class="plans-grid">
+      <div class="plan-card reveal reveal-delay-1">
+        <div class="plan-name">Starter</div>
+        <p class="plan-desc">Para empezar a entender de qué va esto.</p>
+        <div class="plan-price">
+          <span class="plan-price-currency">$</span>
+          <span class="plan-price-amount">18.000</span>
+          <span class="plan-price-period">/mes</span>
+        </div>
+        <ul class="plan-features">
+          <li>250g de café de especialidad</li>
+          <li>Un origen por envío</li>
+          <li>Tarjeta de origen con notas de cata</li>
+          <li>Envío gratis a CABA y zona norte</li>
+          <li>Pausá o cancelá cuando quieras</li>
+        </ul>
+        <a href="#" class="plan-btn plan-btn-outline">Empezar acá</a>
+      </div>
+      <div class="plan-card featured reveal reveal-delay-2">
+        <div class="featured-badge">El más elegido</div>
+        <div class="plan-name">Ritual</div>
+        <p class="plan-desc">La dosis perfecta para el que ya sabe lo que quiere.</p>
+        <div class="plan-price">
+          <span class="plan-price-currency">$</span>
+          <span class="plan-price-amount">28.000</span>
+          <span class="plan-price-period">/mes</span>
+        </div>
+        <ul class="plan-features">
+          <li>500g — dos bolsas de 250g</li>
+          <li>Dos orígenes distintos por envío</li>
+          <li>Tarjetas de origen para cada café</li>
+          <li>Acceso anticipado a orígenes especiales</li>
+          <li>Envío gratis siempre</li>
+          <li>Descuento en accesorios de preparación</li>
+        </ul>
+        <a href="#" class="plan-btn plan-btn-solid">Elegir Ritual</a>
+      </div>
+      <div class="plan-card reveal reveal-delay-3">
+        <div class="plan-name">Obsesivo</div>
+        <p class="plan-desc">Para los que se quedaron sin café y no lo viven bien.</p>
+        <div class="plan-price">
+          <span class="plan-price-currency">$</span>
+          <span class="plan-price-amount">42.000</span>
+          <span class="plan-price-period">/mes</span>
+        </div>
+        <ul class="plan-features">
+          <li>1kg — cuatro bolsas de 250g</li>
+          <li>Selección curada del mes</li>
+          <li>Tarjetas de origen detalladas</li>
+          <li>Acceso a lotes de competición</li>
+          <li>Cata virtual mensual con el tostador</li>
+          <li>Todo gratis, siempre</li>
+        </ul>
+        <a href="#" class="plan-btn plan-btn-outline">Para los que saben</a>
+      </div>
+    </div>
+    <div class="quiz-cta reveal">
+      <div class="quiz-text">
+        <h3>¿No sabés cuál es tu dosis?</h3>
+        <p>Respondé 3 preguntas y te decimos cuál es el café perfecto para empezar.</p>
+      </div>
+      <a href="#" class="btn-primary">Hacer el quiz →</a>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIOS -->
+<div class="testimonials-strip">
+  <div class="testimonial reveal">
+    <p class="testimonial-quote">"Empecé con el plan Starter pensando que era exagerado gastar en café. Tres meses después estoy en Ritual y tengo un molinillo en la cocina. No me arrepiento para nada."</p>
+    <div class="testimonial-author">Sofía M. · Palermo · Plan Ritual</div>
+  </div>
+  <div class="testimonial reveal reveal-delay-1">
+    <p class="testimonial-quote">"El Yirgacheffe del mes pasado fue lo mejor que tomé en años. Y eso que vengo de tomar café de especialidad en cafeterías. Esto es otro nivel en casa."</p>
+    <div class="testimonial-author">Matías R. · San Isidro · Plan Obsesivo</div>
+  </div>
+  <div class="testimonial reveal reveal-delay-2">
+    <p class="testimonial-quote">"Lo regalé para un cumpleaños sin saber qué iba a pasar. Mi amiga me mandó un mensaje a los dos días diciéndome que era el mejor regalo que había recibido. Caso cerrado."</p>
+    <div class="testimonial-author">Valentina C. · Vicente López · Plan Starter</div>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="section-wrap">
+    <div class="section-header reveal">
+      <span class="section-num">04</span>
+      <h2 class="section-title">Nosotros</h2>
+      <div class="section-line"></div>
+    </div>
+    <div class="about-grid">
+      <div class="about-manifesto reveal">
+        The Dose no es para todos. Es para los que ya saben que el café de máquina del bar de la esquina no les alcanza — y para los que todavía no lo saben pero están a punto de descubrirlo. Somos exactamente lo que necesitás. Ni más. Ni menos.
+      </div>
+      <div class="about-content reveal reveal-delay-1">
+        <div class="about-label">El nombre</div>
+        <div class="about-title">¿Por qué "The Dose"?</div>
+        <p class="about-body">En el mundo del café de especialidad, <strong>"the dose" es la medida exacta de café molido para un espresso perfecto</strong>. Generalmente 18-20 gramos. Ni un gramo más, ni uno menos. El que sabe, sonríe cuando lo escucha. El que no sabe todavía, está a punto de descubrir por qué importa.</p>
+        <p class="about-body">Eso somos. Una marca que piensa en los detalles que hacen la diferencia — en el café, en el diseño, en cómo te hablamos. Sin soberbia, con mucha precisión.</p>
+      </div>
+    </div>
+    <div class="values-row">
+      <div class="value-item reveal reveal-delay-1">
+        <div class="value-title">Transparencia</div>
+        <p class="value-desc">Sabés exactamente qué café estás tomando, quién lo cultivó, a qué altura, y qué puntuación tiene. Sin marketing vacío.</p>
+      </div>
+      <div class="value-item reveal reveal-delay-2">
+        <div class="value-title">Frescura</div>
+        <p class="value-desc">Nunca guardamos granos tostados esperando un pedido. Tostamos el martes, despachamos el miércoles, llega el viernes.</p>
+      </div>
+      <div class="value-item reveal reveal-delay-3">
+        <div class="value-title">Criterio</div>
+        <p class="value-desc">No trabajamos con 200 orígenes. Elegimos tres, los conocemos a fondo, y los rotamos con la cosecha. Eso es curaduría real.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand-col">
+      <div class="footer-logo-the">The</div>
+      <div class="footer-logo-dose">DOSE</div>
+      <p class="footer-tagline">Café de especialidad para los que ya saben — y para los que están a punto de descubrirlo.</p>
+      <div class="footer-newsletter">
+        <input type="email" placeholder="tu@email.com">
+        <button>→</button>
+      </div>
+    </div>
+    <div>
+      <div class="footer-col-title">El café</div>
+      <ul class="footer-links">
+        <li><a href="#">Etiopía Yirgacheffe</a></li>
+        <li><a href="#">Colombia Huila</a></li>
+        <li><a href="#">Guatemala Antigua</a></li>
+        <li><a href="#">Próximos orígenes</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-col-title">Suscripción</div>
+      <ul class="footer-links">
+        <li><a href="#">Plan Starter</a></li>
+        <li><a href="#">Plan Ritual</a></li>
+        <li><a href="#">Plan Obsesivo</a></li>
+        <li><a href="#">Regalos</a></li>
+        <li><a href="#">Quiz de preferencias</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-col-title">The Dose</div>
+      <ul class="footer-links">
+        <li><a href="#">Nosotros</a></li>
+        <li><a href="#">Cómo funciona</a></li>
+        <li><a href="#">Preguntas frecuentes</a></li>
+        <li><a href="#">Contacto</a></li>
+        <li><a href="#">Instagram</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="footer-copy">© 2025 The Dose · Café de especialidad · CABA & zona norte · Proyecto educativo ficticio</div>
+    <div class="footer-socials">
+      <a href="#">Instagram</a>
+      <a href="#">TikTok</a>
+      <a href="#">WhatsApp</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+// CURSOR
+const cursor = document.getElementById('cursor');
+const cursorRing = document.getElementById('cursorRing');
+let mouseX = 0, mouseY = 0;
+let ringX = 0, ringY = 0;
+
+document.addEventListener('mousemove', e => {
+  mouseX = e.clientX;
+  mouseY = e.clientY;
+  cursor.style.left = mouseX + 'px';
+  cursor.style.top = mouseY + 'px';
+});
+
+function animateRing() {
+  ringX += (mouseX - ringX) * 0.12;
+  ringY += (mouseY - ringY) * 0.12;
+  cursorRing.style.left = ringX + 'px';
+  cursorRing.style.top = ringY + 'px';
+  requestAnimationFrame(animateRing);
+}
+animateRing();
+
+document.querySelectorAll('a, button').forEach(el => {
+  el.addEventListener('mouseenter', () => {
+    cursor.style.transform = 'translate(-50%, -50%) scale(2)';
+    cursorRing.style.width = '60px';
+    cursorRing.style.height = '60px';
+    cursorRing.style.opacity = '0.3';
+  });
+  el.addEventListener('mouseleave', () => {
+    cursor.style.transform = 'translate(-50%, -50%) scale(1)';
+    cursorRing.style.width = '36px';
+    cursorRing.style.height = '36px';
+    cursorRing.style.opacity = '0.5';
+  });
+});
+
+// NAV SCROLL
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => {
+  nav.classList.toggle('scrolled', window.scrollY > 60);
+});
+
+// SCROLL REVEAL
+const reveals = document.querySelectorAll('.reveal');
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+    }
+  });
+}, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+reveals.forEach(el => observer.observe(el));
+
+// SMOOTH SCROLL
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    const target = document.querySelector(a.getAttribute('href'));
+    if (target) {
+      e.preventDefault();
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  });
+});
+</script>
+</body>
+</html>
