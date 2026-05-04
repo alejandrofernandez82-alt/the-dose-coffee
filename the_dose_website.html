@@ -1033,7 +1033,71 @@ footer {
 
 .footer-socials a:hover { color: var(--gold); }
 
-/* ANIMATIONS */
+/* HUBSPOT FORM OVERRIDE — footer */
+.footer-hubspot-form .hs-form-frame {
+  width: 100%;
+}
+
+.footer-hubspot-form input[type="text"],
+.footer-hubspot-form input[type="email"] {
+  width: 100%;
+  background: rgba(255,255,255,0.05) !important;
+  border: 0.5px solid rgba(255,255,255,0.1) !important;
+  padding: 10px 14px !important;
+  font-family: 'DM Mono', monospace !important;
+  font-size: 10px !important;
+  letter-spacing: 0.1em !important;
+  color: var(--cream) !important;
+  border-radius: 2px !important;
+  outline: none !important;
+  margin-bottom: 8px !important;
+}
+
+.footer-hubspot-form input::placeholder {
+  color: rgba(242,237,228,0.2) !important;
+}
+
+.footer-hubspot-form input[type="submit"] {
+  background: var(--gold) !important;
+  border: none !important;
+  padding: 10px 16px !important;
+  font-family: 'DM Mono', monospace !important;
+  font-size: 10px !important;
+  letter-spacing: 0.12em !important;
+  text-transform: uppercase !important;
+  color: var(--black) !important;
+  cursor: pointer !important;
+  border-radius: 2px !important;
+  transition: background 0.2s !important;
+}
+
+.footer-hubspot-form input[type="submit"]:hover {
+  background: #d4a86a !important;
+}
+
+.footer-hubspot-form label {
+  color: rgba(242,237,228,0.4) !important;
+  font-family: 'DM Mono', monospace !important;
+  font-size: 9px !important;
+  letter-spacing: 0.1em !important;
+  text-transform: uppercase !important;
+}
+
+.footer-hubspot-form .hs-error-msgs {
+  color: #e07070 !important;
+  font-size: 10px !important;
+  font-family: 'DM Mono', monospace !important;
+  list-style: none !important;
+  padding: 4px 0 !important;
+}
+
+.footer-hubspot-form .hs-richtext,
+.footer-hubspot-form .submitted-message {
+  color: var(--gold) !important;
+  font-family: 'DM Mono', monospace !important;
+  font-size: 10px !important;
+  letter-spacing: 0.1em !important;
+}
 @keyframes fadeUp {
   from { opacity: 0; transform: translateY(24px); }
   to { opacity: 1; transform: translateY(0); }
@@ -1421,9 +1485,9 @@ footer {
       <div class="footer-logo-the">The</div>
       <div class="footer-logo-dose">DOSE</div>
       <p class="footer-tagline">Café de especialidad para los que ya saben — y para los que están a punto de descubrirlo.</p>
-      <div class="footer-newsletter">
-        <input type="email" placeholder="tu@email.com">
-        <button>→</button>
+      <div class="footer-hubspot-form">
+        <script src="https://js.hsforms.net/forms/embed/51302470.js" defer></script>
+        <div class="hs-form-frame" data-region="na1" data-form-id="aa0d885d-a949-4f3b-a80e-6d74f34da066" data-portal-id="51302470"></div>
       </div>
     </div>
     <div>
@@ -1533,7 +1597,7 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
   });
 });
 </script>
-  <!-- Start of HubSpot Embed Code -->
+<!-- Start of HubSpot Embed Code -->
 <script type="text/javascript" id="hs-script-loader" async defer src="//js.hs-scripts.com/51302470.js"></script>
 <!-- End of HubSpot Embed Code -->
 </body>
